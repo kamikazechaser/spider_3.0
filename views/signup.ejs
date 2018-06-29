@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+
+<%- include('header'); -%>
+
+<div class="container">
+    <h1 href="/" class="text-center" style="font-family: monospace; font-size: 50px; color: #428bca;">THE READING HUB</h1>
+</div>
+<br>
+
+<body>
+
+<div class="container">
+<div class="col-sm-6 col-sm-offset-3 well">
+
+    <h3><span class="fas fa-sign-in-alt"></span> Sign-up</h3>
+
+    <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+    <% } %>
+
+    <form action="signup" id="signup" method="post">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control" name="name">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" name="email">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-md">Sign-up</button>
+    </form>
+
+    <br>
+
+    <h4>Already have an account? <a href="/signin">Sign-in</a></h4>
+
+</div>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<%- include('header'); -%>
+
+<div class="container">
+    <h1 class="text-center" style="padding-left: 10%; font-family: monospace; font-size: 50px; color: #428bca;"><a href="/">THE READING HUB</a>
+        <div style="float: right;">
+            <a href="/user/private" id="profile" style="color:#13b574" class="far fa-user fa-sm"></a>
+            <a href="/signout" id="signout" style="color:#e05454" class="fas fa-sign-out-alt fa-sm"></a>
+        </div>
+    </h1>
+</div>
+<br>
+
+<body>
+    <div class="container">
+        <div class="row grid-divider well">
+            <div class="col-sm-4">
+                <div style="margin-bottom: 50px"></div>
+                <img class="thumbnail" src=<%= prefetch.book.volumeInfo.imageLinks.thumbnail %>></img>
+            </div>
+            <div class="col-sm-7" style="margin-bottom: 10px">
+                <h2 id="title"><%= prefetch.book.volumeInfo.title %></h2>
+                <h5><%= prefetch.book.volumeInfo.subtitle %></h5>
+            </div>
+            <div style="padding-left:34%">
+                    <input id="input-id" type="text">
+                </div>
+            <div class="col-sm-7" style="margin-bottom: 30px">
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reviewsModal">Reviews</button>
+
+            <div class="modal fade" id="reviewsModal" tabindex="-1" role="dialog" aria-labelledby="reviewsModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="reviewsModalLabel">Reviews</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <form action="/api/newreview" id="newnote" method="post" style="margin-bottom: 50px">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control" name="title">
+                                </div>
+                                <div class="form-group">
+                                    <label>Review</label>
+                                    <textarea class="form-control" rows="4" name="content"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-success">Add Review</button>
+                            </form>
+
+                            <% prefetch.review.forEach(item => { %>
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><b><%= item.title %></b> by <a href=/user/<%= item.id %>><%= item.name %></a></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <%= item.content %>
+                                </div>
+                            </div>
+                            <% }) %>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="favourite" class="btn btn-success">Add To Favourites</button>
+            <button type="button" id="library" class="btn btn-danger">Add To Library</button>
+            <div class="btn-group" role="group">
+                    <select id="status" class="selectpicker show-tick" data-style="btn-primary" title="Update Status" data-width="160px">
+                            <option>Want To Read</option>
+                            <option>Currently Reading</option>
+                            <option>Already Read</option>
+                            </select>
+                    </div>
+            <br><br>
+            <p id="author"><b>Author:</b> <%= prefetch.book.volumeInfo.authors %></p>
+            <p><b>Publisher:</b> <%= prefetch.book.volumeInfo.publisher %></p>
+            <p><b>Published Date:</b> <%= prefetch.book.volumeInfo.publishedDate %></p>
+            <p><b>ISBN:</b> <%= typeof prefetch.book.volumeInfo.industryIdentifiers !== "undefined" ? prefetch.book.volumeInfo.industryIdentifiers[1].identifier : "N/A" %></p>
+            <p><b>Genre:</b> <%= typeof prefetch.book.volumeInfo.categories !== "undefined" ? prefetch.book.volumeInfo.categories[0] : "N/A" %></p>
+            </div>
+            <div class="col-sm-7 desc">
+                <%- prefetch.book.volumeInfo.description %>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

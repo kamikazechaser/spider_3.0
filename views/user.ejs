@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+<%- include('header'); -%>
+
+<% if (prefetch.signedin) { %>
+<div class="container">
+    <h1 class="text-center" style="padding-left: 10%; font-family: monospace; font-size: 50px; color: #428bca;"><a href="/">THE READING HUB</a>
+        <div style="float: right;">
+            <a href="/myprofile" id="profile" style="color:#13b574" class="far fa-user fa-sm"></a>
+            <a href="/signout" id="signout" style="color:#e05454" class="fas fa-sign-out-alt fa-sm"></a>
+        </div>
+    </h1>
+</div>
+<br>
+<% } else { %>
+<div class="container">
+        <h1 class="text-center" style="font-family: monospace; font-size: 50px; color: #428bca;"><a href="/">THE READING HUB</a></h1>
+</div>
+<br>
+<% } %>
+
+<body>
+    <div class="container">
+        <h1 class="text-center"><%= prefetch.user.name %>'s Profile</h1><br>
+        <div class="row grid-divider well">
+            <div class="col-sm-7">
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#currently" aria-controls="currently" role="tab" data-toggle="tab">Currently Reading</a></li>
+                        <li role="presentation"><a href="#favourites" aria-controls="favourites" role="tab" data-toggle="tab">Favourite Books</a></li>
+                        <li role="presentation"><a href="#library" aria-controls="library" role="tab" data-toggle="tab">Books In Library</a></li>
+                        <% if (prefetch.signedin) { %>
+                        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                        <% } %>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="currently"><br>
+                            <ol>
+                                <% prefetch.status.forEach(item => { %>
+                                <li><a target="_blank"  href=/api/book/<%= item.book %>><%= item.title %></a></li>
+                                <% }) %>
+                            </ol>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="favourites"><br>
+                            <ol>
+                                <% prefetch.favourite.forEach(item => { %>
+                                <li><a target="_blank"  href=/api/book/<%= item.book %>><%= item.title %></a></li>
+                                <% }) %>
+                            </ol>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="library"><br>
+                            <ol>
+                                <% prefetch.library.forEach(item => { %>
+                                <li><a target="_blank"  href=/api/book/<%= item.book %>><%= item.title %></a></li>
+                                <% }) %>
+                            </ol>
+                        </div>
+                        <% if (prefetch.signedin) { %>
+                        <div role="tabpanel" class="tab-pane" id="settings"><br>
+                            <p><b>Name:</b> <%= prefetch.user.name %></p>
+                            <p><b>Date joined:</b> <%= prefetch.user.createdAt %></p>
+                            <p><b>Public URL:</b> <%= prefetch.host %>/user/<%= prefetch.user.id %></p>
+                            <div class="checkbox">
+                                <label><input id="profilecheck" type="checkbox" value="">Set Profile As Private</label>
+                              </div>
+                            <div style="margin-bottom: 20px"></div>
+                            <div class="fb-share-button" data-href=https://<%= prefetch.host %>/user/<%= prefetch.user.id %> data-layout="button" data-size="large"></div>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-center">User Activity</h3>
+            <div class="col-sm-5 desc"><br>
+                <% if (prefetch.user.visible === true || prefetch.signedin) { %>
+
+                <% prefetch.logs.forEach(item => { %>
+
+                <% if (item.value === "Favourites") { %>
+                <p><span class="glyphicon glyphicon-plus" style="color: #e05454"></span> <%= item.action %> <%= item.book %> to <b style="color: #e05454"><%= item.value %></b></p>
+                <% } %>
+                <% if (item.value === "Library") { %>
+                <p><span class="glyphicon glyphicon-book" style="color: #ab9f1f"></span> <%= item.action %> <%= item.book %> to the <b style="color: #ab9f1f"><%= item.value %></b></p>
+                <% } %>
+                <% if (item.action === "Rated") { %>
+                <p ><span class="glyphicon glyphicon-star" style="color: #13b574"></span> <%= item.action %> <%= item.book %> <b style="color: #13b574"><%= item.value %>/5</b></p>
+                <% } %>
+                <% if (item.action === "Reviewed") { %>
+                    <p ><span class="glyphicon glyphicon-pencil" style="color: #890f7b"></span> <b style="color: #890f7b"><%= item.action %></b> <%= item.book %> </p>
+                <% } %>
+                <% if (item.value === null) { %>
+                <p><span class="glyphicon glyphicon-bookmark" style="color: #428bca"></span> <b style="color: #428bca"><%= item.action %></b> <%= item.book %></p>
+                <% } %>
+                <% }) %>
+
+                <% } else { %>
+                    <p><i>User activity is set to private!</i></p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

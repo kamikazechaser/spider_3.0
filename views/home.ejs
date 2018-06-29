@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+
+<%- include('header'); -%>
+
+    <div class="container">
+        <h1 class="text-center" style="padding-left: 10%; font-family: monospace; font-size: 50px; color: #428bca;"><a href="/">THE READING HUB</a>
+            <div style="float: right;">
+                <a href="/user/private" id="profile" style="color:#13b574" class="far fa-user fa-sm"></a>
+                <a href="/signout" id="signout" style="color:#e05454" class="fas fa-sign-out-alt fa-sm"></a>
+            </div>
+        </h1>
+    </div>
+    <br>
+
+    <body>
+        <div class="container">
+            <h1 class="text-center">Search For Books</h1><br>
+            <div style="margin-bottom: 150px;">
+            <select id="searchbar" class="selectpicker">
+                <option>Title</option>
+                <option>Author</option>
+                <option>Publisher</option>
+                <option>ISBN</option>
+              </select>
+            <input type="text" class="form-control" style="width: 80%; float: right;" name="booksearch" placeholder="Start typing to search" id="autocomplete"/>
+            </div>
+            <h1 class="text-center">Recommended Books</h1><br>
+            <div class="row">
+                <% prefetch.items.forEach(item => { %>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <img class="thumbs" src=<%= item.volumeInfo.imageLinks.thumbnail %>>
+                        <div class="caption">
+                            <h4><a href=/api/book/<%= item.id %>
+                                </a><%= item.volumeInfo.title %></a></h4>
+                            <% if (item.volumeInfo.categories !== "undefined") {%>
+                                <span class="label label-success"><%= item.volumeInfo.categories %></span>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </body>
+
+</html>
